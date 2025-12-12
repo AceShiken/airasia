@@ -32,7 +32,7 @@ spring:
 # Open Exchange Rates Configuration
 openexchangerates:
   api:
-    key: YOUR_API_KEY_HERE
+    key: 79a282cd5a3d409885acb4a721fc28c1
     base-url: https://openexchangerates.org/api
     cache-duration-minutes: 60
 

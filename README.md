@@ -33,7 +33,7 @@ A robust and scalable RESTful API for currency conversion using the Open Exchang
 
 ## 🛠 Tech Stack
 
-- **Java 17** - Programming language
+- **Java 21 LTS** - Programming language
 - **Spring Boot 3.2.0** - Application framework
 - **Spring Web** - REST API development
 - **Spring Data JPA** - Data persistence
@@ -90,10 +90,15 @@ currency-conversion-api/
 
 ## 📦 Prerequisites
 
-- Java 17 or higher
+- Java 21 LTS (recommended) or higher
 - Maven 3.6 or higher
 - Docker (optional, for containerized deployment)
 - Open Exchange Rates API key (free plan available at https://openexchangerates.org/)
+
+**Note:** If Maven is using a different Java version by default, you can specify Java 21 by setting `JAVA_HOME`:
+```bash
+export JAVA_HOME=$(/usr/libexec/java_home -v 21)
+```
 
 ## 🚀 Setup Instructions
 
@@ -129,6 +134,9 @@ export OPENEXCHANGERATES_API_KEY=your_actual_api_key
 ### Option 1: Using Maven
 
 ```bash
+# Ensure Java 21 is being used
+export JAVA_HOME=$(/usr/libexec/java_home -v 21)
+
 # Build the project
 mvn clean install
 
