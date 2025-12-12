@@ -58,8 +58,8 @@ class ExchangeRateServiceTest {
         mockResponse.setTimestamp(System.currentTimeMillis() / 1000);
         mockResponse.setRates(mockRates);
         
-        when(appConfig.getApiKey()).thenReturn("test-api-key");
-        when(appConfig.getBaseUrl()).thenReturn("https://openexchangerates.org/api");
+        lenient().when(appConfig.getApiKey()).thenReturn("test-api-key");
+        lenient().when(appConfig.getBaseUrl()).thenReturn("https://openexchangerates.org/api");
     }
     
     @Test
