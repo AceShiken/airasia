@@ -1,0 +1,164 @@
+{
+  "info": {
+    "name": "Currency Conversion API",
+    "description": "API collection for testing Currency Conversion endpoints",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Convert USD to EUR",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/convert?from=USD&to=EUR&amount=100",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["convert"],
+          "query": [
+            {"key": "from", "value": "USD"},
+            {"key": "to", "value": "EUR"},
+            {"key": "amount", "value": "100"}
+          ]
+        }
+      }
+    },
+    {
+      "name": "Convert EUR to GBP",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/convert?from=EUR&to=GBP&amount=50",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["convert"],
+          "query": [
+            {"key": "from", "value": "EUR"},
+            {"key": "to", "value": "GBP"},
+            {"key": "amount", "value": "50"}
+          ]
+        }
+      }
+    },
+    {
+      "name": "Convert JPY to USD",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/convert?from=JPY&to=USD&amount=10000",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["convert"],
+          "query": [
+            {"key": "from", "value": "JPY"},
+            {"key": "to", "value": "USD"},
+            {"key": "amount", "value": "10000"}
+          ]
+        }
+      }
+    },
+    {
+      "name": "Get All Rates",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/rates",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["rates"]
+        }
+      }
+    },
+    {
+      "name": "Health Check",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": [""]
+        }
+      }
+    },
+    {
+      "name": "Actuator Health",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/actuator/health",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["actuator", "health"]
+        }
+      }
+    },
+    {
+      "name": "Error - Invalid Amount (Negative)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/convert?from=USD&to=EUR&amount=-100",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["convert"],
+          "query": [
+            {"key": "from", "value": "USD"},
+            {"key": "to", "value": "EUR"},
+            {"key": "amount", "value": "-100"}
+          ]
+        }
+      }
+    },
+    {
+      "name": "Error - Currency Not Found",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/convert?from=USD&to=XYZ&amount=100",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["convert"],
+          "query": [
+            {"key": "from", "value": "USD"},
+            {"key": "to", "value": "XYZ"},
+            {"key": "amount", "value": "100"}
+          ]
+        }
+      }
+    },
+    {
+      "name": "Error - Missing Parameter",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/convert?from=USD&to=EUR",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["convert"],
+          "query": [
+            {"key": "from", "value": "USD"},
+            {"key": "to", "value": "EUR"}
+          ]
+        }
+      }
+    }
+  ]
+}

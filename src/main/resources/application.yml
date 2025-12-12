@@ -1,0 +1,61 @@
+spring:
+  application:
+    name: currency-conversion-api
+  
+  # H2 Database Configuration
+  datasource:
+    url: jdbc:h2:mem:currencydb
+    driver-class-name: org.h2.Driver
+    username: sa
+    password: 
+  
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: true
+  
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+  
+  # Cache Configuration
+  cache:
+    type: caffeine
+    caffeine:
+      spec: maximumSize=500,expireAfterWrite=3600s
+
+# Open Exchange Rates Configuration
+openexchangerates:
+  api:
+    key: YOUR_API_KEY_HERE
+    base-url: https://openexchangerates.org/api
+    cache-duration-minutes: 60
+
+# Server Configuration
+server:
+  port: 8080
+  error:
+    include-message: always
+    include-binding-errors: always
+
+# Management/Actuator Configuration
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      show-details: always
+
+# Logging Configuration
+logging:
+  level:
+    com.airasia: INFO
+    org.springframework.web: INFO
+    org.hibernate: WARN
