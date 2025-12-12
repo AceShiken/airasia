@@ -46,8 +46,8 @@ public class ExchangeRateService {
         log.info("Fetching latest exchange rates from Open Exchange Rates API");
         
         try {
-            String url = String.format("%s/latest.json?app_id=%s", 
-                appConfig.getBaseUrl(), 
+            String url = "%s/latest.json?app_id=%s".formatted(
+                appConfig.getBaseUrl(),
                 appConfig.getApiKey());
             
             ExchangeRatesResponse response = restTemplate.getForObject(url, ExchangeRatesResponse.class);

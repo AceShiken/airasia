@@ -88,8 +88,8 @@ public class GlobalExceptionHandler {
         
         log.error("Method argument type mismatch: {}", ex.getMessage());
         
-        String message = String.format("Invalid value for parameter '%s'. Expected type: %s", 
-            ex.getName(), 
+        String message = "Invalid value for parameter '%s'. Expected type: %s".formatted(
+            ex.getName(),
             ex.getRequiredType() != null ? ex.getRequiredType().getSimpleName() : "unknown");
         
         ErrorResponse errorResponse = ErrorResponse.builder()
