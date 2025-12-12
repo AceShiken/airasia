@@ -38,7 +38,7 @@ A robust and scalable RESTful API for currency conversion using the Open Exchang
 - **Spring Web** - REST API development
 - **Spring Data JPA** - Data persistence
 - **H2 Database** - In-memory database
-- **Caffeine Cache** - High-performance caching
+- **Guava Cache** - High-performance caching
 - **Lombok** - Boilerplate code reduction
 - **JUnit 5** - Testing framework
 - **Mockito** - Mocking framework
@@ -356,11 +356,12 @@ docker-compose down
 
 ### 1. Caching Strategy
 
-The application implements **Caffeine Cache** with the following configuration:
+The application implements **Guava Cache** with the following configuration:
 
 - **Cache Duration**: 60 minutes (configurable)
 - **Maximum Size**: 500 entries
 - **Strategy**: Cache the entire rates map to minimize API calls
+- **Statistics**: Records cache hit/miss statistics for monitoring
 
 **Benefits:**
 - Reduces external API calls by ~99% for repeated requests

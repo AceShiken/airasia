@@ -25,9 +25,7 @@ spring:
   
   # Cache Configuration
   cache:
-    type: caffeine
-    caffeine:
-      spec: maximumSize=500,expireAfterWrite=3600s
+    type: guava
 
 # Open Exchange Rates Configuration
 openexchangerates:

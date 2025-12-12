@@ -72,10 +72,11 @@
             <scope>test</scope>
         </dependency>
         
-        <!-- Caffeine Cache -->
+        <!-- Guava Cache -->
         <dependency>
-            <groupId>com.github.ben-manes.caffeine</groupId>
-            <artifactId>caffeine</artifactId>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>33.0.0-jre</version>
         </dependency>
         
         <!-- Spring Boot Actuator (for health checks) -->
