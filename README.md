@@ -6,9 +6,7 @@ A robust and scalable RESTful API for currency conversion using the Open Exchang
 
 - [Features](#features)
 - [Tech Stack](#tech-stack)
-- [Project Structure](#project-structure)
 - [Prerequisites](#prerequisites)
-- [Setup Instructions](#setup-instructions)
 - [Running the Application](#running-the-application)
 - [API Endpoints](#api-endpoints)
 - [Testing](#testing)
@@ -45,49 +43,6 @@ A robust and scalable RESTful API for currency conversion using the Open Exchang
 - **Maven** - Build tool
 - **Docker** - Containerization
 
-## 📁 Project Structure
-
-```
-currency-conversion-api/
-├── src/
-│   ├── main/
-│   │   ├── java/com/airasia/currencyconversion/
-│   │   │   ├── config/
-│   │   │   │   └── AppConfig.java
-│   │   │   ├── controller/
-│   │   │   │   └── CurrencyConversionController.java
-│   │   │   ├── dto/
-│   │   │   │   ├── ConversionResponse.java
-│   │   │   │   ├── ErrorResponse.java
-│   │   │   │   └── ExchangeRatesResponse.java
-│   │   │   ├── exception/
-│   │   │   │   ├── CurrencyNotFoundException.java
-│   │   │   │   ├── ExternalApiException.java
-│   │   │   │   ├── GlobalExceptionHandler.java
-│   │   │   │   └── InvalidConversionRequestException.java
-│   │   │   ├── model/
-│   │   │   │   └── ExchangeRate.java
-│   │   │   ├── repository/
-│   │   │   │   └── ExchangeRateRepository.java
-│   │   │   ├── service/
-│   │   │   │   └── ExchangeRateService.java
-│   │   │   └── CurrencyConversionApiApplication.java
-│   │   └── resources/
-│   │       └── application.yml
-│   └── test/
-│       └── java/com/airasia/currencyconversion/
-│           ├── controller/
-│           │   └── CurrencyConversionControllerTest.java
-│           ├── service/
-│           │   └── ExchangeRateServiceTest.java
-│           └── CurrencyConversionApiApplicationTests.java
-├── Dockerfile
-├── docker-compose.yml
-├── .env.example
-├── pom.xml
-└── README.md
-```
-
 ## 📦 Prerequisites
 
 - Java 21 LTS (recommended) or higher
@@ -98,35 +53,6 @@ currency-conversion-api/
 **Note:** If Maven is using a different Java version by default, you can specify Java 21 by setting `JAVA_HOME`:
 ```bash
 export JAVA_HOME=$(/usr/libexec/java_home -v 21)
-```
-
-## 🚀 Setup Instructions
-
-### 1. Clone the Repository
-
-```bash
-cd airasia
-```
-
-### 2. Get API Key
-
-1. Sign up for a free account at [Open Exchange Rates](https://openexchangerates.org/signup/free)
-2. Copy your API key from the dashboard
-
-### 3. Configure API Key
-
-Open `src/main/resources/application.yml` and replace `YOUR_API_KEY_HERE` with your actual API key:
-
-```yaml
-openexchangerates:
-  api:
-    key: YOUR_ACTUAL_API_KEY_HERE
-```
-
-Alternatively, you can set it as an environment variable:
-
-```bash
-export OPENEXCHANGERATES_API_KEY=your_actual_api_key
 ```
 
 ## 🏃 Running the Application
@@ -546,41 +472,13 @@ Access the H2 database console at: `http://localhost:8080/h2-console`
 - Username: `sa`
 - Password: (leave empty)
 
-## 🚀 Deployment to Cloud
-
-### Google Cloud Run
-
-```bash
-# Build and push to Google Container Registry
-gcloud builds submit --tag gcr.io/YOUR_PROJECT_ID/currency-api
-
-# Deploy to Cloud Run
-gcloud run deploy currency-api \
-  --image gcr.io/YOUR_PROJECT_ID/currency-api \
-  --platform managed \
-  --region us-central1 \
-  --allow-unauthenticated \
-  --set-env-vars OPENEXCHANGERATES_API_KEY=your_key
-```
-
-### AWS ECS/Fargate
-
-```bash
-# Build and push to ECR
-docker build -t currency-api .
-docker tag currency-api:latest YOUR_AWS_ACCOUNT.dkr.ecr.region.amazonaws.com/currency-api:latest
-docker push YOUR_AWS_ACCOUNT.dkr.ecr.region.amazonaws.com/currency-api:latest
-
-# Deploy using ECS task definition
-```
-
 ## 📝 License
 
 This project is created for evaluation purposes.
 
 ## 👥 Author
 
-AirAsia Candidate
+Ayon Gargary
 
 ## 🙏 Acknowledgments
 
