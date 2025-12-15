@@ -355,7 +355,7 @@ Include dependencies for web, cache, H2 database, JPA, validation, and testing.
 ```
 Implement a service class that:
 - Fetches exchange rates from Open Exchange Rates API using RestTemplate
-- Implements Caffeine caching to minimize API calls
+- Implements Guava caching to minimize API calls
 - Stores rates in H2 database for fallback
 - Handles currency conversion without using the /convert endpoint (free plan limitation)
 - Includes comprehensive error handling
@@ -439,9 +439,7 @@ server:
 # Cache
 spring:
   cache:
-    type: caffeine
-    caffeine:
-      spec: maximumSize=500,expireAfterWrite=3600s
+    type: guava
 
 # H2 Database
 spring:
@@ -460,7 +458,6 @@ You can override configuration using environment variables:
 ```bash
 export OPENEXCHANGERATES_API_KEY=your_key
 export SERVER_PORT=8080
-export SPRING_CACHE_CAFFEINE_SPEC=maximumSize=1000,expireAfterWrite=7200s
 ```
 
 ## 📊 H2 Console Access
