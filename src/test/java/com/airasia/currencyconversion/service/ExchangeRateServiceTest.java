@@ -14,6 +14,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.cache.Cache;
+import org.springframework.cache.CacheManager;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
@@ -39,6 +41,12 @@ class ExchangeRateServiceTest {
     @Mock
     private ExchangeRateRepository exchangeRateRepository;
     
+    @Mock
+    private CacheManager cacheManager;
+    
+    @Mock
+    private Cache cache;
+    
     @InjectMocks
     private ExchangeRateService exchangeRateService;
     
@@ -60,6 +68,10 @@ class ExchangeRateServiceTest {
         
         lenient().when(appConfig.getApiKey()).thenReturn("test-api-key");
         lenient().when(appConfig.getBaseUrl()).thenReturn("https://openexchangerates.org/api");
+        
+        // Mock cache behavior - return null to simulate cache miss by default
+        lenient().when(cacheManager.getCache("exchangeRates")).thenReturn(cache);
+        lenient().when(cache.get("latestRates")).thenReturn(null);
     }
     
     @Test

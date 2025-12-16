@@ -10,7 +10,8 @@ import com.airasia.currencyconversion.model.ExchangeRate;
 import com.airasia.currencyconversion.repository.ExchangeRateRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.Cache;
+import org.springframework.cache.CacheManager;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestClientException;
@@ -33,17 +34,37 @@ public class ExchangeRateService {
     private final RestTemplate restTemplate;
     private final AppConfig appConfig;
     private final ExchangeRateRepository exchangeRateRepository;
+    private final CacheManager cacheManager;
+    
+    private static final String CACHE_NAME = "exchangeRates";
+    private static final String CACHE_KEY = "latestRates";
     
     /**
-     * Fetch latest exchange rates from Open Exchange Rates API
-     * Results are cached for 1 hour to minimize API calls
+     * Fetch latest exchange rates with Cache → API → DB fallback strategy
+     * 1. First checks cache
+     * 2. If not in cache, calls API and stores in both cache and DB
+     * 3. If API fails, falls back to DB
      * 
      * @return Map of currency codes to exchange rates
      */
-    @Cacheable(value = "exchangeRates", unless = "#result == null")
     @Transactional
     public Map<String, Double> getLatestRates() {
-        log.info("Fetching latest exchange rates from Open Exchange Rates API");
+        // Step 1: Check cache first
+        Cache cache = cacheManager.getCache(CACHE_NAME);
+        if (cache != null) {
+            Cache.ValueWrapper cachedValue = cache.get(CACHE_KEY);
+            if (cachedValue != null) {
+                @SuppressWarnings("unchecked")
+                Map<String, Double> rates = (Map<String, Double>) cachedValue.get();
+                if (rates != null && !rates.isEmpty()) {
+                    log.info("Returning {} exchange rates from cache", rates.size());
+                    return rates;
+                }
+            }
+        }
+        
+        // Step 2: Cache miss - call API
+        log.info("Cache miss - fetching latest exchange rates from Open Exchange Rates API");
         
         try {
             String url = "%s/latest.json?app_id=%s".formatted(
@@ -56,16 +77,24 @@ public class ExchangeRateService {
                 throw new ExternalApiException("Failed to fetch exchange rates from API");
             }
             
-            // Store rates in H2 database for persistence
+            Map<String, Double> rates = response.getRates();
+            
+            // Store rates in database for persistence
             storeRatesInDatabase(response);
             
-            log.info("Successfully fetched {} exchange rates", response.getRates().size());
-            return response.getRates();
+            // Store in cache
+            if (cache != null) {
+                cache.put(CACHE_KEY, rates);
+                log.info("Stored {} rates in cache", rates.size());
+            }
+            
+            log.info("Successfully fetched {} exchange rates from API", rates.size());
+            return rates;
             
         } catch (RestClientException e) {
-            log.error("Error calling Open Exchange Rates API", e);
+            log.error("Error calling Open Exchange Rates API: {}", e.getMessage());
             
-            // Fallback to database if API call fails
+            // Step 3: API failed - fallback to database
             return getRatesFromDatabase();
         }
     }
@@ -97,20 +126,36 @@ public class ExchangeRateService {
     }
     
     /**
-     * Fallback method to retrieve rates from database
+     * Fallback method to retrieve rates from database when API is unavailable
      */
     private Map<String, Double> getRatesFromDatabase() {
-        log.warn("Falling back to database for exchange rates");
+        log.warn("API unavailable - falling back to database for exchange rates");
         
         try {
-            return exchangeRateRepository.findByBaseCurrency("USD")
+            Map<String, Double> rates = exchangeRateRepository.findByBaseCurrency("USD")
                 .stream()
                 .collect(java.util.stream.Collectors.toMap(
                     ExchangeRate::getCurrency,
                     ExchangeRate::getRate
                 ));
+            
+            if (rates.isEmpty()) {
+                throw new ExternalApiException(
+                    "No exchange rates available: API is down and database is empty. " +
+                    "Please try again later or ensure the API is accessible."
+                );
+            }
+            
+            log.info("Retrieved {} exchange rates from database", rates.size());
+            return rates;
+            
         } catch (Exception e) {
-            throw new ExternalApiException("Failed to fetch exchange rates from API and database", e);
+            if (e instanceof ExternalApiException) {
+                throw e;
+            }
+            throw new ExternalApiException(
+                "Failed to fetch exchange rates from both API and database", e
+            );
         }
     }
     
